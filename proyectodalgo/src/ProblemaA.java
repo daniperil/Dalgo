@@ -32,19 +32,25 @@ public class ProblemaA {
 
 	/**
 	 * Algoritmo de solución que dado un arreglo busca el arreglo recurrente más largo dentro de este
+	 * precondición - true, no hay condiciones iniciales para el arreglo
+	 * postcondición - se retorna max como el arreglo recurrente más largo del arreglo a
 	 * @param a arreglo de números
 	 * @return El tamaño del arreglo recurrente más largo dentro de a
 	 */
 	public int arregloRecurrenteMasLargo(int[] a) {
+		// La variable max alamacena cual es el elemento máximo globalmente, se inicializa en cero para retornar una respuesta adecuada en
+		// un caso nulo
 		int max = 0;
+		// c es una variable que representa un tamaño de subarreglo recurrente más grande localmente para cada una de las distancias posibles
 		int c = -1;
-		int in = 0;
+		// en el ciclo la i se interpreta como la d del enunciado del problema
 		for(int i = 1; i< a.length; i++) {
 			for(int k = i; k<a.length; k++) {
+				// En caso de que sean diferentes los valores en las posiciones en las que se va a comparar se reinicia el contador local
 				if(a[k-i]!=a[k]) {
 					c = -1;
-					in = k;
 				}
+				// El contador local se actualiza por cada iteración y en caso de que no se cumpla la condición estará en cero
 				c++;
 				if(c>max) {
 					max = c;
@@ -54,49 +60,5 @@ public class ProblemaA {
 		}
 		return max;
 	}
-	public int buscarSubArreglo(int[] arreglo){
-		//Longitud del arreglo mas largo 
-		int l= 0;
-		int c=0;
-		int d=0;
-		int mp=-1;
-		int ip=-1;
-		int mn=-1;
-		for (int i=arreglo.length-1; i>=0; i--)
-		{
-			if (arreglo[i]<0)
-			{
-				if (arreglo[i]*-1>mn)
-				{
-					mn=arreglo[i]*-1;
-					d=ip-i;
-				}
-			}
-			else 
-			{
-				if (arreglo[i]>mp)
-				{
-					if(arreglo[i]>mn)
-					{
-						mp=arreglo[i];
-						ip=i;
-						c=0;
-					}
-					else 
-					{
-						mp= arreglo[i];
-						ip=i;
-						c-=d;
-					}
-						
-				}
-			}
-			c++;
-			if(c>l)
-			{
-				l=c;
-			}
-		}
-		return l;
-	}
+	
 }
