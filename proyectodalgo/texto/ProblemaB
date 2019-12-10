@@ -1,0 +1,34 @@
+Identificación:
+
+0.Nombre de autores:
+Diego
+Daniel Perilla 201327313
+
+
+1.Algoritmo de solución
+Precondicón: Los valores de A y B tienen que ser mayores a 9
+
+Postcondición: Lista de ints y número de gente en donde se mantuvo un crecimiento para las As y un
+			   decrecimiento para las Bs.
+			   
+El algoritmo que se escogió fue uno de recorrido en listas.
+Para el problema tocaba en primera instancia traducir la información a de una lista de Strings a
+una lista de ints, luego de este paso tocaba separar los grupos de gente.
+Para hacer esto se utilizó un polo que verificaba, que si el número se referia a un dato entre A 
+y B o a un clasificador de gente.
+
+Pasado esto tocaba mirar cuantos contraejemplos estaban en la muestra. Esto se hizo mediante otro
+for que verificaba si las As crecian y las Bs decrecian y se sumaba un dígito a la respuesta en 
+para cada par de valores.
+
+Al final se comparaban las cadenas con los valores más altos.
+
+2. Análisis de complejidad.
+
+Debido a que en el método evaluar se utilizó un método for dentro de un while y una serie de ifs.
+Se dice que el costo máximo en términos de complejidad es n^2+6.
+
+3. Comentarios finales.
+
+Es un algoritmo simple pero tiene sus defectos. El más destacable es que la precondición es muy 
+fuerte y puede prevenir que otra serie de datos pueda ser analizada de esta manera. 
