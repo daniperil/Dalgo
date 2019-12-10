@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Arrays;
 /**
  * Clase que presenta la solución al problema del arreglo recurrente más largo
@@ -55,7 +54,6 @@ public class ProblemaA {
 				if(c>max) {
 					max = c;
 				}
-				
 			}
 		}
 		return max;

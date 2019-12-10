@@ -1,9 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Stack;
 
-import java.util.ArrayList;
 /**
  * Clase que representa la solución al problema Dentro o fuera
  * @author Juan Diego Camacho
