@@ -4,121 +4,122 @@ import java.io.InputStreamReader;
 import java.util.Stack;
 
 import java.util.ArrayList;
-//Autora: Vilma Tirado Gómez
+/**
+ * Clase que representa la solución al problema Dentro o fuera
+ * @author Juan Diego Camacho
+ * @author Daniel Perilla
+ *
+ */
 public class ProblemaC {
 
-	public static ArrayList<Integer> maximo(int[][] servicios, int equipos, Stack<ArrayList<Integer>> st, ArrayList<Integer> actual, ArrayList<Integer> max){
-
-		int sumaMax = ganancia(servicios, max);
-		int sumaActual=ganancia(servicios, actual);
-		if(sumaActual>=sumaMax){
-			if(fechas(servicios, actual, equipos)){
-				max=actual;
-			}
-		}
-		if(!actual.isEmpty()){
-			int ultimo= actual.get(actual.size()-1);
-			for (int i = ultimo+1; i < servicios.length; i++) {
-				ArrayList<Integer> copia= (ArrayList<Integer>) actual.clone();
-				copia.add(i);
-				st.add(copia);
-			}
-		}
-		else{
-			for (int i = 0; i < servicios.length; i++) {
-				ArrayList<Integer> copia= (ArrayList<Integer>) actual.clone();
-				copia.add(i);
-				st.add(copia);
-			}
-		}
-		if(!st.isEmpty()){
-			max=maximo(servicios, equipos, st, st.pop(),max);
-		}
-
-		return max;
-	}
-
-	public static int ganancia(int[][] servicios, ArrayList<Integer> actual ){
-		int suma =0;
-		for (int i = 0; i < actual.size(); i++) {
-			int k = actual.get(i);
-			suma += servicios[k][3];
-		}
-		return suma;
-	}
-
-	public static boolean fechas(int[][] servicios,ArrayList<Integer> actual,int equipos){
-		boolean val = true;
-		int dia = dia(servicios);
-		for (int i = 0; i <= dia; i++) {
-			int numeroEquipos=0;
-			for (int j = 0; j < actual.size(); j++) {
-				int[] evento1=servicios[actual.get(j)];
-				if((evento1[1]<=i&&evento1[2]>=i)||(evento1[1]==evento1[2]&&evento1[2]==i)){
-					numeroEquipos++;
-					if(numeroEquipos>equipos){
-						return false;
-					}
-				}
-			}
-		}
-		return val;
-	}
-
-	public static int dia(int[][] servicios){
-		int dia = primerDia(servicios);
-		int diaMax = dia;
-		for (int i = 0; i < servicios.length; i++) {
-			int temp =diaMax;
-			diaMax = Math.max(servicios[i][2], dia);
-			if(diaMax!=temp){
-				dia=temp;
-			}
-		}
-		return dia;
-	}
-
-	public static int primerDia(int[][]servicios){
-		int diaMax = 0;
-		for (int i = 0; i < servicios.length; i++) {
-			diaMax = Math.max(servicios[i][1], diaMax);
-		}
-		return diaMax;
-	}
-
+	private Coordenada[] poligono;
+	private int tam;
+	boolean enVertice;
+	Coordenada punto;
 	public static void main(String[] args) throws IOException
 	{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String linea;
-		int equipos;
+		int puntox;
+		int puntoy;
+		int lados;
 		int numServicios;
 		String data[][];
+		
 		while (true)
 		{																	
 			linea = br.readLine();
-			if (linea.equals("0 0"))
+			if (linea.equals("0 0 0 0"))
 				return;
-
-			equipos = Integer.parseInt(linea.split(" ")[1]);;
-			numServicios = Integer.parseInt(linea.split(" ")[0]);; 
-			int[][] dataNum=new int[numServicios][4];
-			data = new String[numServicios][4];
-
-			for (int i = 0; i < numServicios; i++) {
-				data[i] = br.readLine().split(" ");
-				for (int j = 0; j < data[i].length; j++) {
-					dataNum[i][j]=Integer.parseInt(data[i][j]);
-				}
-			}
-
-			ArrayList<Integer> max=maximo(dataNum, equipos, new Stack<ArrayList<Integer>>(), new ArrayList<Integer>(),new ArrayList<Integer>());
-			System.out.println(ganancia(dataNum, max));
-
-
-
+			lados = Integer.parseInt(linea.split(" ")[1]);
+			puntox = Integer.parseInt(linea.split(" ")[2]);
+			puntoy = Integer.parseInt(linea.split(" ")[3]);
+			linea = br.readLine();
+			
+			String[] datos = linea.split(" ");
+			ProblemaC a = new ProblemaC(datos, lados, puntox, puntoy);
+			System.out.println(a.fueraODentro());
+			
 		}
-
+					
 	}
-
-
+	public ProblemaC(String[] data, int lados, int corx, int cory) {
+		poligono = new Coordenada[lados];
+		tam = lados;
+		enVertice = false;
+		for(int i = 0; i < 2*lados; i+=2 ) {
+			poligono[i/2] = new Coordenada(Integer.parseInt(data[i]), Integer.parseInt(data[i+1])); 
+			if(Integer.parseInt(data[i])== corx && Integer.parseInt(data[i+1])== cory)
+				enVertice = true;
+		}
+		punto = new Coordenada(corx, cory);
+	}
+	
+	public Coordenada[] getPoligono() {
+		return poligono;
+	}
+	
+	public int fueraODentro() {
+		if (enVertice)
+			return 0;
+		int intersecciones = 0;
+		for(int i = 1; i <tam; i++) {
+			if(poligono[i].getY()==poligono[i-1].getY() && poligono[i].getY() == punto.getY() 
+					&& punto.getX()>Math.min(poligono[i].getX(), poligono[i+1].getX()) && 
+					punto.getX()<Math.max(poligono[i].getX(),poligono[i-1].getX()) ) {
+				return 0;
+			}
+			
+			if(punto.getY()> Math.min(poligono[i].getY(), poligono[i-1].getY()) &&
+					punto.getY()<= Math.max(poligono[i].getY(), poligono[i-1].getY()) &&
+					punto.getX() <= Math.max(poligono[i].getX(), poligono[i-1].getX())&&
+					poligono[i].getY() != poligono[i-1].getY()) {
+				
+				double xCalculado = (double)(punto.getY()-poligono[i].getY())*
+						(poligono[i-1].getX()-poligono[i].getX())/(poligono[i-1].getY()-poligono[i].getY()) +
+						poligono[i].getX();
+				
+				if(xCalculado == punto.getX())
+					return 0;
+				if(poligono[i].getX() == poligono[i-1].getX() || punto.getX() < xCalculado) {
+					intersecciones++;
+				}	
+			}
+		}
+		if(intersecciones % 2 != 0)
+			return 1;
+		else
+			return -1;	
+	}
+	
+	class Coordenada {
+		private int x;
+		private int y;
+		public Coordenada(int x, int y ) {
+			this.x = x;
+			this.y = y;
+		}
+		
+		public int getX() {
+			return x;
+		}
+		
+		public int getY() {
+			return y;
+		}
+		
+		public String toString() {
+			return "("+x+", "+y+")";
+		}
+		
+	}
+	
+	public String toString() {
+		String r = "[";
+		for(int i = 0; i<poligono.length; i++) {
+			r+=poligono[i].toString()+", ";
+		}
+		r+="]";
+		return r;
+	}
 }
